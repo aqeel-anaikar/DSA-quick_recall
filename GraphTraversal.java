@@ -66,7 +66,7 @@ public class GraphTraversal {
     }
 
     public static void main(String[] args) {
-        DFS g = new DFS();
+        GraphTraversal g = new GraphTraversal();
         g.addEdge(1, 2);
         g.addEdge(1, 3);
         g.addEdge(2, 4);

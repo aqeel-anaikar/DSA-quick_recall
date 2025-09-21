@@ -42,7 +42,7 @@ public class BST {
     public void printInorder(){
         System.out.print("Inorder [ ");
         printInorder(root);
-ā    }
+    }
     private void printInorder(node temproot){
         if (temproot!=null) {   
             printInorder(temproot.left);
