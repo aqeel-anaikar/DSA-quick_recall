@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class DFS {
+public class GraphTraversal {
     private Map <Integer, List<Integer>> graph = new HashMap<>();    
 
     public void addEdge(int from, int to){

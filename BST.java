@@ -1,161 +1,107 @@
-import java.util.*;
-
-class bst {
+public class BST {
     class node {
-        int key;
+        int data;
         node left, right;
 
-        public node(int item) {
-            key = item;
-            left = right = null;
+        node(int data) {
+            this.data = data;
+            this.left = null;
+            this.right = null;
         }
     }
+    node root = null;
 
-    node root;
-
-    bst() {
-        root = null;
-    }
-
-    // Tree insert
-    void insert(int key) {
-        root = insertRec(root, key);
-    }
-
-    node insertRec(node root, int key) {
+    public void insert(int data) {
+        node newnode = new node(data);
+        // when First node to create
         if (root == null) {
-            root = new node(key);
-            return root;
+            root = newnode;
+            return;
         }
-        if (key < root.key) {
-            root.left = insertRec(root.left, key);
-        } else if (key > root.key) {
-            root.right = insertRec(root.right, key);
+        // when Root is alredy allocated
+        node temproot = root;
+        while (true) {
+            if (data < temproot.data) {// checking data with root to add in left 
+                if (temproot.left == null) { // checking left is null
+                    temproot.left = newnode;
+                    return;
+                }
+                temproot = temproot.left;
+            } else {
+                if (data > temproot.data) {// checking data with root to add in right
+                    if (temproot.right == null) { // checking right is null
+                        temproot.right = newnode;
+                        return;
+                    }
+                    temproot = temproot.right;
+                }
+            }
         }
-        return root;
-    }
 
-    // In-order
-    void inorder() {
-        inorderRec(root);
     }
-
-    void inorderRec(node root) {
-        if (root != null) {
-            inorderRec(root.left);
-            System.out.print(root.key + " ");
-            inorderRec(root.right);
-        }
-    }
-
-    // Pre-Order
-    void preorder() {
-        preorderRec(root);
-    }
-
-    void preorderRec(node root) {
-        if (root != null) {
-            System.out.print(root.key + " ");
-            preorderRec(root.left);
-            preorderRec(root.right);
-        }
-    }
-
-    // Post-Order
-    void postorder() {
-        postorderRec(root);
-    }
-
-    void postorderRec(node root) {
-        if (root != null) {
-            postorderRec(root.left);
-            postorderRec(root.right);
-            System.out.print(root.key + " ");
+    public void printInorder(){
+        System.out.print("Inorder [ ");
+        printInorder(root);
+ā    }
+    private void printInorder(node temproot){
+        if (temproot!=null) {   
+            printInorder(temproot.left);
+            System.out.print(temproot.data+" ");
+            printInorder(temproot.right);
         }
     }
-
-    // Search Function
-    boolean search(int key) {
-        return searchRec(root, key);
+    public void printPreorder(){
+        System.out.print("Preorder [ ");
+        printPreorder(root);
+        System.out.println(" ]");
     }
-
-    boolean searchRec(node root, int key) {
-        if (root == null)
-            return false;
-        if (root.key == key)
-            return true;
-        if (root.key > key)
-            return searchRec(root.left, key);
-        return searchRec(root.right, key);
-    }
-
-    // Delete Function
-    void delete(int key) {
-        root = deleteRec(root, key);
-    }
-
-    node deleteRec(node root, int key) {
-        if (root == null)
-            return root;
-        if (key < root.key)
-            root.left = deleteRec(root.left, key);
-        else if (key > root.key)
-            root.right = deleteRec(root.right, key);
-        else {
-            if (root.left == null)
-                return root.right;
-            else if (root.right == null)
-                return root.left;
-            root.key = minValue(root.right);
-            root.right = deleteRec(root.right, root.key);
+    private void printPreorder(node temproot){
+        if (temproot!=null) {   
+            System.out.print(temproot.data+" ");
+            printInorder(temproot.left);
+            printInorder(temproot.right);
         }
-        return root;
     }
-
-    // Min Value Function
-    int minValue(node root) {
-        int minv = root.key;
-        while (root.left != null) {
-            minv = root.left.key;
-            root = root.left;
+    public void printPostorder(){
+        System.out.print("Postorder [ ");
+        printPostorder(root);
+        System.out.println(" ]");
+    }
+    private void printPostorder(node temproot){
+        if (temproot!=null) {   
+            printInorder(temproot.left);
+            printInorder(temproot.right);
+            System.out.print(temproot.data+" ");
         }
-        return minv;
     }
 
-}
+    public boolean search(int key){
+        node temproot = root;
+        while(temproot!=null){
+            if(temproot.data == key){
+                return true;
+            }
+            else if(key < temproot.data)
+                temproot = temproot.left;
+            else if(key> temproot.data)
+                temproot = temproot.right;
+            else return false;
+        }
+        return false;
+    }
 
-public class BST {
+
+
     public static void main(String[] args) {
-        bst b = new bst();
-        Scanner sc = new Scanner(System.in);
-        // insert nodes
-        System.out.print("Enter Test Case: ");
-        int test_case = sc.nextInt();
-        int value;
-        for (int i = 0; i < test_case; i++) {
-            System.out.print("Enter value" + i + ":");
-            value = sc.nextInt();
-            b.insert(value);
-            System.out.println();
-        }
-        // print in order of tree
-        System.out.println("Inorder Travesal of the tree");
-        b.inorder();
-        // Print preorder traversal of the tree
-        System.out.println("\nPreorder traversal of the tree: ");
-        b.preorder();
-
-        // Print postorder traversal of the tree
-        System.out.println("\nPostorder traversal of the tree: ");
-        b.postorder();
-        // Search for a key
-        int key = 40;
-        if (b.search(key))
-            System.out.println("\n" + key + " found in the tree.");
-        else
-            System.out.println("\n" + key + " not found in the tree.");
-        // Delete node 20
-        b.delete(20);
-        System.out.println("\nInorder traversal of the modified tree afterdeletion of 20: ");
+        BST tree = new BST();
+        tree.insert(4);
+        tree.insert(5);
+        tree.insert(3);
+        tree.insert(2);
+        tree.insert(1);
+        tree.insert(6);
+        tree.printInorder();//[1 2 3 4 5 6 ]
+        tree.printPreorder();//[1 2 3 4 5 6 ]
+        tree.printPostorder();//[1 2 3 4 5 6 ]
     }
 }
